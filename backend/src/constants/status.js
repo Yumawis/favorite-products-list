@@ -1,0 +1,6 @@
+const STATUS = {
+  AVAILABLE: "AVAILABLE",
+  UNAVAILABLE: "UNAVAILABLE",
+};
+
+module.exports = STATUS;

@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema(
     names: { type: String, trim: true, required: true },
     lastNames: { type: String, trim: true, required: true },
     nickName: { type: String, trim: true, required: true },
-    documentNumber: { type: Number, required: true, unique: true },
+    documentNumber: { type: Number, unique: true, required: true },
   },
   { timestamps: true }
 );

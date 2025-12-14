@@ -1,6 +1,6 @@
 const STATUS = {
-  AVAILABLE: "AVAILABLE",
-  UNAVAILABLE: "UNAVAILABLE",
+  AVAILABLE: "Disponible",
+  UNAVAILABLE: "No disponible",
 };
 
 module.exports = STATUS;

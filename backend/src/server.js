@@ -6,7 +6,8 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
-const productsRouter = require("./routes/productsRouter");
+const productRouter = require("./routes/productRouter");
+const favoriteProductRouter = require("./routes/favoriteProductRouter");
 
 // 🏗️ Initialize the Express application
 const app = express();
@@ -27,7 +28,8 @@ const prefix = "/api/v1/favorite-products-list";
 
 // 🛣️ Main Routes
 app.use(`${prefix}/auth`, authRoutes);
-app.use(`${prefix}/products`, productsRouter);
+app.use(`${prefix}/product`, productRouter);
+app.use(`${prefix}/favorite`, favoriteProductRouter);
 
 // ⚙️ Start the server
 app.listen(process.env.PORT, () => {

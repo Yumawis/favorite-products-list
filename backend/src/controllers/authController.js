@@ -7,7 +7,7 @@ const signUp = async (req, res) => {
 
     const existingUser = await User.findOne({ documentNumber });
 
-    if (!!existingUser) {
+    if (existingUser) {
       return res.status(400).json({
         data: {
           message: "El número de documento ya se encuentra registrado",
@@ -57,7 +57,7 @@ const login = async (req, res) => {
     const { nickName, documentNumber } = req.body;
 
     // Busca al usuario por su DNI
-    const user = await User.findOne({ documentNumber });
+    const user = await User.findOne({ nickName, documentNumber });
 
     if (!user) {
       return res.status(404).json({
@@ -67,7 +67,7 @@ const login = async (req, res) => {
       });
     }
 
-    console.log("user:", nickName);
+    console.log("Inicio de sesión:", nickName, documentNumber);
 
     const response = {
       data: {

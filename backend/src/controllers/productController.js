@@ -1,11 +1,13 @@
 const Product = require("../models/Product");
 
+const { validateQualify } = require("../validators/productValidator");
+
 // 👉 Registrar producto
 const createProduct = async (req, res) => {
   try {
-    const { productName, status, stock, image } = req.body;
+    const { name, status, stock, image } = req.body;
 
-    const existingProduct = await Product.findOne({ productName });
+    const existingProduct = await Product.findOne({ name });
 
     if (existingProduct) {
       return res.status(400).json({
@@ -14,7 +16,7 @@ const createProduct = async (req, res) => {
     }
 
     const newProduct = new Product({
-      productName,
+      name,
       status,
       stock,
       image,
@@ -79,4 +81,64 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-module.exports = { createProduct, getAllProducts };
+// 👉 Calificación de productos
+const qualifyProduct = async (req, res) => {
+  try {
+    const { productId, qualifyNumber } = req.body;
+
+    const validationError = validateQualify({ productId, qualifyNumber });
+
+    if (validationError) {
+      return res.status(400).json({
+        data: {
+          message: validationError,
+        },
+      });
+    }
+
+    const product = await Product.findById(productId).select("qualifySum qualifyCount");
+
+    if (!product) {
+      return res.status(400).json({
+        data: { message: "Error al encontrar producto" },
+      });
+    }
+
+    const { qualifySum, qualifyCount } = product;
+
+    let totalQualify = qualifySum + qualifyNumber;
+
+    let currentCount = qualifyCount + 1;
+
+    let averageQualify = totalQualify / currentCount;
+
+    await product.updateOne({
+      score: averageQualify,
+      qualifySum: totalQualify,
+      qualifyCount: currentCount,
+    });
+
+    const response = {
+      data: {
+        message: "Calificación realizada correctamente",
+      },
+    };
+
+    return res.status(200).json(response);
+  } catch (error) {
+    const errorMessage = error.message;
+
+    console.error("Error al realizar la calificación:", errorMessage);
+
+    const response = {
+      data: {
+        message: "Ocurrió un error al realizar la calificación",
+        error: errorMessage,
+      },
+    };
+
+    return res.status(422).json(response);
+  }
+};
+
+module.exports = { createProduct, getAllProducts, qualifyProduct };

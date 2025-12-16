@@ -3,7 +3,7 @@ const User = require("../models/User");
 // 👉 Registrar usuario
 const signUp = async (req, res) => {
   try {
-    const { names, lastNames, nickName, documentNumber } = req.body;
+    const { names, lastNames, nickname, documentNumber } = req.body;
 
     const existingUser = await User.findOne({ documentNumber });
 
@@ -18,7 +18,7 @@ const signUp = async (req, res) => {
     const newUser = new User({
       names,
       lastNames,
-      nickName,
+      nickname,
       documentNumber,
     });
 
@@ -54,10 +54,10 @@ const signUp = async (req, res) => {
 // 👉 Iniciar sesión
 const login = async (req, res) => {
   try {
-    const { nickName, documentNumber } = req.body;
+    const { nickname, documentNumber } = req.body;
 
     // Busca al usuario por su DNI
-    const user = await User.findOne({ nickName, documentNumber });
+    const user = await User.findOne({ nickname, documentNumber });
 
     if (!user) {
       return res.status(404).json({
@@ -67,14 +67,14 @@ const login = async (req, res) => {
       });
     }
 
-    console.log("Inicio de sesión:", nickName, documentNumber);
+    console.log("Inicio de sesión:", nickname, documentNumber);
 
     const response = {
       data: {
         message: "Inicio de sesión exitoso",
         result: {
           id: user._id,
-          nickName: user.nickName,
+          nickname: user.nickname,
           documentNumber: user.documentNumber,
         },
       },

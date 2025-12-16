@@ -1,23 +1,36 @@
 const User = require("../models/User");
 const Product = require("../models/Product");
-
 const FavoriteProduct = require("../models/FavoriteProduct");
+
+const STATUS = require("../constants/status");
+
+const { validateFavoriteProduct } = require("../validators/favoriteValidator");
 
 // 👉 Agregar producto favorito
 const addFavoriteProduct = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { productId, status } = req.body;
+    const { products } = req.body;
 
-    const user = await User.findById(userId);
+    const validationError = validateFavoriteProduct({ userId });
 
-    if (!user) {
+    if (validationError) {
       return res.status(400).json({
-        data: { message: "Usuario no encontrado" },
+        data: {
+          message: validationError,
+        },
       });
     }
 
-    const product = await Product.findById(productId);
+    const userExists = await User.exists({ _id: userId });
+
+    if (!userExists) {
+      return res.status(400).json({
+        data: { message: "El usuario no existe" },
+      });
+    }
+
+    const product = await Product.findById(products);
 
     if (!product) {
       return res.status(400).json({
@@ -25,30 +38,28 @@ const addFavoriteProduct = async (req, res) => {
       });
     }
 
-    const favorite = await FavoriteProduct.findOne({ userId });
+    const { status } = product;
 
-    if (favorite && favorite.productId.includes(productId)) {
+    if (status !== STATUS.AVAILABLE) {
       return res.status(400).json({
-        data: { message: "El producto ya se encuentra en la lista de favoritos" },
-      });
-    }
-
-    const availableProduct = await Product.findOne({ status });
-
-    if (!availableProduct) {
-      return res.status(400).json({
-        data: { message: "El producto no se encuentra disponible" },
+        data: { message: "No se puede agregar un producto no disponible" },
       });
     }
 
     const favoriteProduct = await FavoriteProduct.findOneAndUpdate(
       { userId },
       {
-        $addToSet: { productId },
+        $addToSet: { products },
         $setOnInsert: { userId },
       },
       { new: true, upsert: true }
     );
+
+    if (favoriteProduct.modifiedCount === 0) {
+      return res.status(400).json({
+        message: "El producto ya se encuentra en la lista de favoritos",
+      });
+    }
 
     console.log("Producto agregado:", favoriteProduct);
 

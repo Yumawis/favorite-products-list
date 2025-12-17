@@ -54,10 +54,10 @@ const signUp = async (req, res) => {
 // 👉 Iniciar sesión
 const login = async (req, res) => {
   try {
-    const { nickname, documentNumber } = req.body;
+    const { documentNumber } = req.body;
 
     // Busca al usuario por su DNI
-    const user = await User.findOne({ nickname, documentNumber });
+    const user = await User.findOne({ documentNumber });
 
     if (!user) {
       return res.status(404).json({
@@ -67,7 +67,7 @@ const login = async (req, res) => {
       });
     }
 
-    console.log("Inicio de sesión:", nickname, documentNumber);
+    console.log("Inicio de sesión:", documentNumber);
 
     const response = {
       data: {

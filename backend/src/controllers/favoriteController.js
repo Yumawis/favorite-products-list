@@ -10,7 +10,7 @@ const { validateFavoriteProduct } = require("../validators/favoriteValidator");
 const addFavoriteProduct = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { products } = req.body;
+    const { productId } = req.body;
 
     const validationError = validateFavoriteProduct({ userId });
 
@@ -30,7 +30,7 @@ const addFavoriteProduct = async (req, res) => {
       });
     }
 
-    const product = await Product.findById(products);
+    const product = await Product.findById(productId);
 
     if (!product) {
       return res.status(400).json({
@@ -46,27 +46,37 @@ const addFavoriteProduct = async (req, res) => {
       });
     }
 
-    const favoriteProduct = await FavoriteProduct.findOneAndUpdate(
-      { userId },
+    const favoriteProduct = await FavoriteProduct.updateOne(
       {
-        $addToSet: { products },
-        $setOnInsert: { userId },
+        productId,
+        users: { $ne: userId },
       },
-      { new: true, upsert: true }
+      {
+        $addToSet: { users: userId },
+        $inc: { favoritesCount: 1 },
+        $setOnInsert: { productId },
+      },
+      {
+        upsert: true,
+      }
     );
 
-    if (favoriteProduct.modifiedCount === 0) {
+    if (favoriteProduct.matchedCount === 1 && favoriteProduct.modifiedCount === 0) {
       return res.status(400).json({
-        message: "El producto ya se encuentra en la lista de favoritos",
+        data: { message: "El producto ya se encuentra en favoritos" },
       });
     }
+
+    const favorite = await FavoriteProduct.findOne({ productId })
+      .populate("productId")
+      .sort({ favoritesCount: -1 });
 
     console.log("Producto agregado:", favoriteProduct);
 
     const response = {
       data: {
         message: "Producto agregado a favoritos",
-        result: favoriteProduct,
+        result: favorite,
       },
     };
 

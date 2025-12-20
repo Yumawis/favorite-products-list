@@ -1,10 +1,30 @@
+import { useNavigate } from "react-router-dom";
 import CustomLoginCard from "../cards/CustomLoginCard";
 import CustomNumberInput from "../inputs/CustomNumberInput";
 
 import { Box, Button, Typography } from "@mui/material";
 import { Field, Form, Formik } from "formik";
+import { useLoginMutation } from "../services/authService";
+import { useEffect } from "react";
 
-const Login = ({ onGoToRegister }) => {
+const Login = () => {
+  const navigate = useNavigate();
+
+  const [login, { data, error, isSuccess, isError, isLoading }] = useLoginMutation();
+
+  const handleLogin = (documentNumber) => {
+    login({ documentNumber });
+  };
+
+  const handleRegister = () => {
+    navigate("/register");
+  };
+
+  useEffect(() => {
+    if (isSuccess) navigate("/products");
+    if (isError) alert(error?.data?.message);
+  }, [error, isSuccess, isError]);
+
   return (
     <CustomLoginCard>
       <h1>Login</h1>
@@ -12,7 +32,8 @@ const Login = ({ onGoToRegister }) => {
       <Formik
         initialValues={{ documentNumber: "" }}
         onSubmit={(values) => {
-          console.log("LOGIN:", values);
+          const documentNumber = values.documentNumber;
+          handleLogin(documentNumber);
         }}
       >
         {({ values, handleChange, handleBlur }) => (
@@ -38,7 +59,7 @@ const Login = ({ onGoToRegister }) => {
                   component="span"
                   color="#1E88E5"
                   sx={{ cursor: "pointer", fontWeight: 600 }}
-                  onClick={onGoToRegister}
+                  onClick={handleRegister}
                 >
                   Regístrate
                 </Typography>

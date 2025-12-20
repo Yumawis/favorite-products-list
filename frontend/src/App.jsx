@@ -1,28 +1,16 @@
-import { useState } from "react";
-
-import ProductContainer from "./containers/ProductContainer";
 import Login from "./pages/Login";
 import Register from "./pages/register";
+import Products from "./pages/products";
 
-import { Box } from "@mui/material";
+import { Route, Routes } from "react-router-dom";
 
 const App = () => {
-  const [view, setView] = useState("login");
-
   return (
-    <ProductContainer>
-      <Box
-        sx={{
-          width: "530px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "45px",
-        }}
-      >
-        {view === "login" && <Login onGoToRegister={() => setView("register")} />}
-        {view === "register" && <Register onGoToLogin={() => setView("login")} />}
-      </Box>
-    </ProductContainer>
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/products" element={<Products />} />
+    </Routes>
   );
 };
 

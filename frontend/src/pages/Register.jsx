@@ -4,8 +4,15 @@ import CustomNumberInput from "../inputs/CustomNumberInput";
 
 import { Button, Typography, Box } from "@mui/material";
 import { Field, Form, Formik } from "formik";
+import { useNavigate } from "react-router-dom";
 
-const Register = ({ onGoToLogin }) => {
+const Register = () => {
+  const navigate = useNavigate();
+
+  const handleBackToLogin = () => {
+    navigate("/");
+  };
+
   return (
     <CustomLoginCard>
       <h1>Registrar</h1>
@@ -73,7 +80,7 @@ const Register = ({ onGoToLogin }) => {
                   component="span"
                   color="primary"
                   sx={{ cursor: "pointer", fontWeight: 600 }}
-                  onClick={onGoToLogin}
+                  onClick={handleBackToLogin}
                 >
                   Inicia sesión
                 </Typography>

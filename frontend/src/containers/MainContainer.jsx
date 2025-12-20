@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-const ProductContainer = ({ children, sx = {} }) => {
+const MainContainer = ({ children, sx = {} }) => {
   return (
     <Box
       sx={{
@@ -19,4 +19,4 @@ const ProductContainer = ({ children, sx = {} }) => {
   );
 };
 //
-export default ProductContainer;
+export default MainContainer;

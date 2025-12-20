@@ -1,16 +1,17 @@
 import { Box } from "@mui/material";
 
-const CustomLoginCard = ({ children, sx = {} }) => {
+const CustomFlexCard = ({ children, sx = {} }) => {
   return (
     <Box
       sx={{
         width: "100%",
+        height: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        padding: "25px",
-        gap: "25px",
+        padding: "15px",
+        gap: "20px",
         borderRadius: "1rem",
         background: "#ffffff",
         ...sx,
@@ -21,4 +22,4 @@ const CustomLoginCard = ({ children, sx = {} }) => {
   );
 };
 
-export default CustomLoginCard;
+export default CustomFlexCard;

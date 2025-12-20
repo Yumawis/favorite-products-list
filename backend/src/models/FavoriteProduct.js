@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 
 const favoriteProductSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    products: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }] },
+    productId: { type: { type: mongoose.Schema.Types.ObjectId, ref: "Product" } },
+    users: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }] },
+    favoritesCount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

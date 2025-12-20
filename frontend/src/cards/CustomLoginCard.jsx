@@ -1,18 +1,18 @@
 import { Box } from "@mui/material";
 
-import colors from "../theme/colors";
-
-const ProductsContainer = ({ children, sx = {} }) => {
+const CustomLoginCard = ({ children, sx = {} }) => {
   return (
     <Box
       sx={{
         width: "100%",
-        height: "100vh",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
         justifyContent: "center",
-        backgroundColor: colors.primary,
+        alignItems: "center",
+        padding: "25px",
+        gap: "25px",
+        borderRadius: "1rem",
+        background: "#ffffff",
         ...sx,
       }}
     >
@@ -21,4 +21,4 @@ const ProductsContainer = ({ children, sx = {} }) => {
   );
 };
 
-export default ProductsContainer;
+export default CustomLoginCard;

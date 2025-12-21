@@ -1,15 +1,17 @@
 import Login from "./pages/Login";
-import Register from "./pages/register";
-import Products from "./pages/products";
+import SignUp from "./pages/SignUp";
+import Products from "./pages/Products";
 
+import { ROUTES } from "./constants/navigateRoutes";
 import { Route, Routes } from "react-router-dom";
 
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/products" element={<Products />} />
+      <Route path={ROUTES.LOGIN} element={<Login />} />
+      <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
+      <Route path={ROUTES.PRODUCTS} element={<Products />} />
+      <Route path="*" element={<div>Not Found 404</div>} />
     </Routes>
   );
 };

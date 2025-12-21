@@ -21,7 +21,7 @@ export const productService = baseApi.injectEndpoints({
       transformErrorResponse: (response) => response?.data,
     }),
 
-    qualifyProduct: buildErrorMessage.mutation({
+    qualifyProduct: builder.mutation({
       query: ({ productId, qualifyNumber }) => ({
         url: "product/qualify",
         method: "POST",

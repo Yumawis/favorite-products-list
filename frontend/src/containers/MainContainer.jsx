@@ -1,11 +1,10 @@
 import { Box } from "@mui/material";
 
-const ProductContainer = ({ children, sx = {} }) => {
+const MainContainer = ({ children, sx = {} }) => {
   return (
     <Box
       sx={{
         width: "100%",
-        height: "100vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -18,5 +17,5 @@ const ProductContainer = ({ children, sx = {} }) => {
     </Box>
   );
 };
-//
-export default ProductContainer;
+
+export default MainContainer;

@@ -18,7 +18,7 @@ export const authService = baseApi.injectEndpoints({
         method: "POST",
         body: { names, lastNames, nickname, documentNumber },
       }),
-      transformResponse: (response) => response?.data?.result,
+      transformResponse: (response) => response?.data,
       transformErrorResponse: (response) => response?.data,
     }),
   }),

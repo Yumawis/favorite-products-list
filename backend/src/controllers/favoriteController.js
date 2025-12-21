@@ -30,15 +30,18 @@ const addFavoriteProduct = async (req, res) => {
       });
     }
 
-    const product = await Product.findById(productId);
+    const productExists = await Product.exists({
+      _id: productId,
+      status: STATUS.AVAILABLE,
+    });
 
-    if (!product) {
+    if (!productExists) {
       return res.status(400).json({
         data: { message: "Producto no encontrado" },
       });
     }
 
-    const { status } = product;
+    const { status } = productExists;
 
     if (status !== STATUS.AVAILABLE) {
       return res.status(400).json({
@@ -49,7 +52,6 @@ const addFavoriteProduct = async (req, res) => {
     const favoriteProduct = await FavoriteProduct.updateOne(
       {
         productId,
-        users: { $ne: userId },
       },
       {
         $addToSet: { users: userId },

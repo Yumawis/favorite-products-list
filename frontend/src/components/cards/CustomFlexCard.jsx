@@ -5,13 +5,12 @@ const CustomFlexCard = ({ children, sx = {} }) => {
     <Box
       sx={{
         width: "100%",
-        height: "100%",
+        minHeight: "300px",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",
         padding: "15px",
-        gap: "20px",
+        gap: "25px",
         borderRadius: "1rem",
         background: "#ffffff",
         ...sx,

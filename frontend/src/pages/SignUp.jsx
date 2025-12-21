@@ -1,6 +1,6 @@
 import MainContainer from "../containers/MainContainer";
 
-import CustomFlexCard from "../cards/CustomFlexCard";
+import CustomFlexCard from "../components/cards/CustomFlexCard";
 import CustomTextInput from "../inputs/CustomTextInput";
 import CustomNumberInput from "../inputs/CustomNumberInput";
 
@@ -11,6 +11,9 @@ import { Field, Form, Formik } from "formik";
 
 import { useSignUpMutation } from "../services/authService";
 import { ROUTES } from "../constants/navigateRoutes";
+
+import CustomLink from "../components/CustomLink";
+import CustomButton from "../components/buttons/CustomButton";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -34,13 +37,13 @@ const SignUp = () => {
   }, [data, isSuccess, isError]);
 
   return (
-    <MainContainer>
+    <MainContainer sx={{ height: "100vh" }}>
       <Box
         sx={{
           width: "530px",
           display: "flex",
           flexDirection: "column",
-          gap: "45px",
+          textAlign: "center",
         }}
       >
         <CustomFlexCard>
@@ -58,68 +61,61 @@ const SignUp = () => {
             }}
           >
             {({ values, handleChange, handleBlur }) => (
-              <Form style={{ width: "100%" }}>
-                <Field
-                  as={CustomTextInput}
-                  name="names"
-                  label="Nombres"
-                  value={values.names}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-
-                <Field
-                  as={CustomTextInput}
-                  name="lastNames"
-                  label="Apellidos"
-                  sx={{ marginTop: "15px" }}
-                  value={values.lastNames}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-
-                <Field
-                  as={CustomTextInput}
-                  name="nickname"
-                  label="Nickname"
-                  sx={{ marginTop: "15px" }}
-                  value={values.nickname}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-
-                <Field
-                  as={CustomNumberInput}
-                  name="documentNumber"
-                  label="Número de documento"
-                  sx={{ marginTop: "15px" }}
-                  value={values.documentNumber}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-
-                <Button
-                  type="submit"
-                  variant="contained"
-                  fullWidth
-                  sx={{ marginTop: "20px" }}
-                  disabled={isLoading}
+              <Form>
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "15px",
+                  }}
                 >
-                  {!isLoading ? "Registrarse" : "Cargando..."}
-                </Button>
+                  <Field
+                    as={CustomTextInput}
+                    name="names"
+                    label="Nombres"
+                    value={values.names}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
 
-                <Box sx={{ marginTop: "15px", textAlign: "center" }}>
-                  <Typography variant="body2">
-                    ¿Ya tienes cuenta?{" "}
-                    <Typography
-                      component="span"
-                      color="primary"
-                      sx={{ cursor: "pointer", fontWeight: 600 }}
-                      onClick={handleBackToLogin}
-                    >
-                      Inicia sesión
+                  <Field
+                    as={CustomTextInput}
+                    name="lastNames"
+                    label="Apellidos"
+                    value={values.lastNames}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+
+                  <Field
+                    as={CustomTextInput}
+                    name="nickname"
+                    label="Nickname"
+                    value={values.nickname}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+
+                  <Field
+                    as={CustomNumberInput}
+                    name="documentNumber"
+                    label="Número de documento"
+                    value={values.documentNumber}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+
+                  <CustomButton type="submit" disabled={isLoading}>
+                    {!isLoading ? "Registrarse" : "Cargando..."}
+                  </CustomButton>
+
+                  <Box sx={{ marginTop: "5px", textAlign: "center" }}>
+                    <Typography variant="body2">
+                      ¿Ya tienes cuenta?{" "}
+                      <CustomLink path={ROUTES.LOGIN} text="Inicia Sesión"></CustomLink>
                     </Typography>
-                  </Typography>
+                  </Box>
                 </Box>
               </Form>
             )}

@@ -53,9 +53,34 @@ const createProduct = async (req, res) => {
 // 👉 Obtener todos los productos
 const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.aggregate([
+      {
+        $lookup: {
+          from: "favoriteproducts",
+          localField: "_id",
+          foreignField: "productId",
+          as: "favorite",
+        },
+      },
 
-    console.log("Productos obtenidos:", products.length);
+      {
+        $addFields: {
+          favoritesCount: {
+            $ifNull: [{ $arrayElemAt: ["$favorite.favoritesCount", 0] }, 0],
+          },
+        },
+      },
+
+      {
+        $sort: { favoritesCount: -1 },
+      },
+
+      {
+        $project: {
+          favorite: 0,
+        },
+      },
+    ]);
 
     const response = {
       data: {

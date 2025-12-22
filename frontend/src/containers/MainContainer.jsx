@@ -9,7 +9,6 @@ const MainContainer = ({ children, sx = {} }) => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#d3c7c7ff",
         ...sx,
       }}
     >

@@ -11,7 +11,7 @@ const {
 router.post("/", createProduct);
 
 // 👉 Obtener todos los productos
-router.get("/", getAllProducts);
+router.get("/:userId", getAllProducts);
 
 // 👉 Calificación
 router.post("/qualify", qualifyProduct);

@@ -13,8 +13,8 @@ export const productService = baseApi.injectEndpoints({
     }),
 
     getAllProducts: builder.query({
-      query: () => ({
-        url: "product",
+      query: ( userId ) => ({
+        url: `product/${userId}`,
         method: "GET",
       }),
       transformResponse: (response) => response?.data?.result,
@@ -33,5 +33,8 @@ export const productService = baseApi.injectEndpoints({
   }),
 });
 
-export const { useCreateProductMutation, useGetAllProductsQuery, useQualifyProductMutation } =
-  productService;
+export const {
+  useCreateProductMutation,
+  useGetAllProductsQuery,
+  useQualifyProductMutation,
+} = productService;

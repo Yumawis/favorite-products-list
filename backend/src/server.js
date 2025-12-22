@@ -40,7 +40,7 @@ app.use(`${prefix}/favorite`, favoriteProductRouter);
 app.listen(PORT, () => {
   console.log("=======================================================");
   console.log("🟢 Servidor iniciado correctamente");
-  console.log(`🌐 URL base: http://localhost:${PORT}`);
+  console.log(`🌐 URL base: http://localhost:${PORT}${prefix}`);
   console.log("⚙️ Configuración:");
   console.log(`     - CORS permitido: ${ALLOWED_CORS}`);
 });

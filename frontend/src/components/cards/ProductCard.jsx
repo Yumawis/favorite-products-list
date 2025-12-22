@@ -53,11 +53,26 @@ const ProductCard = ({ product, userId, sx = {} }) => {
       <Box
         sx={{
           width: "100%",
-          height: "100%",
+          height: "250px",
           backgroundColor: "#f2f2f2",
           borderRadius: 2,
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
-      />
+      >
+        <img
+          src={`data:image/png;base64,${product?.image}`}
+          alt={product?.name}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
+      </Box>
+
       <Typography variant="h6">{product?.name}</Typography>
 
       <Typography color="text.secondary">

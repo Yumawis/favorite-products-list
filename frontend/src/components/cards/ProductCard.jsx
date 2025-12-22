@@ -1,8 +1,40 @@
 import { Box, IconButton, Rating, Typography } from "@mui/material";
 
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
-const ProductCard = ({ product, sx = {} }) => {
+import { useAddFavoriteProductMutation } from "../../services/favoriteServices";
+import { useQualifyProductMutation } from "../../services/productService";
+
+import { useEffect } from "react";
+import { useState } from "react";
+
+const ProductCard = ({ product, userId, sx = {} }) => {
+  const [rating, setRating] = useState(product?.score || 0);
+
+  const [addFavoriteProduct, { data, error, isSuccess, isError, isLoading }] =
+    useAddFavoriteProductMutation();
+
+  const [
+    qualifyProduct,
+    {
+      data: qualifyNumberData,
+      error: qualifyNumberError,
+      isSuccess: isSuccessQualifyNumber,
+      isError: isErrorQualifyNumber,
+      isLoading: isLoadingQualifyNumber,
+    },
+  ] = useQualifyProductMutation();
+
+  const handleAddFavoriteProduct = () => {
+    addFavoriteProduct({ userId, productId: product?._id });
+  };
+
+  useEffect(() => {
+    if (isSuccess) alert(data?.message);
+    if (isError) alert(error?.data?.message);
+  }, [isSuccess, isError, data, error]);
+
   return (
     <Box
       sx={{
@@ -42,11 +74,29 @@ const ProductCard = ({ product, sx = {} }) => {
           marginTop: "auto",
         }}
       >
-        <Rating value={0} readOnly size="small" />
+        <Rating
+          value={rating}
+          size="medium"
+          onChange={(event, newValue) => {
+            if (!newValue) return;
 
-        <IconButton>
-          <FavoriteBorderIcon />
-        </IconButton>
+            setRating(newValue);
+            qualifyProduct({
+              productId: product._id,
+              qualifyNumber: newValue,
+            });
+          }}
+        />
+
+        {product?.isFavorite ? (
+          <IconButton onClick={handleAddFavoriteProduct}>
+            <FavoriteIcon sx={{ fill: "red" }} />
+          </IconButton>
+        ) : (
+          <IconButton onClick={handleAddFavoriteProduct}>
+            <FavoriteBorderIcon />
+          </IconButton>
+        )}
       </Box>
     </Box>
   );

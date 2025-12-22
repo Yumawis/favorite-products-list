@@ -16,7 +16,8 @@ import CustomLink from "../components/CustomLink";
 const Login = () => {
   const navigate = useNavigate();
 
-  const [login, { data, error, isSuccess, isError, isLoading }] = useLoginMutation();
+  const [login, { data, error, isSuccess, isError, isLoading }] =
+    useLoginMutation();
 
   const isSubmitting = isLoading || isSuccess;
 
@@ -25,15 +26,20 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (isSuccess) navigate(ROUTES.PRODUCTS);
+    if (isSuccess){
+      navigate(ROUTES.PRODUCTS, {
+        state: { id: data?.id, nickname: data?.nickname },
+      });
+    }
+    
     if (isError) alert(error?.data?.message);
   }, [data, error, isSuccess, isError]);
 
   return (
-    <MainContainer sx={{ height: "100vh", padding: "250px" }}>
+    <MainContainer sx={{ height: "100vh" }}>
       <Box
         sx={{
-          width: "100%",
+          width: "530px",
           display: "flex",
           flexDirection: "column",
           textAlign: "center",
@@ -85,7 +91,8 @@ const Login = () => {
 
                   <Box sx={{ marginTop: "5px", textAlign: "center" }}>
                     <Typography variant="body2">
-                      ¿No estás registrado? <CustomLink path={ROUTES.SIGN_UP} text="Regístrate" />
+                      ¿No estás registrado?{" "}
+                      <CustomLink path={ROUTES.SIGN_UP} text="Regístrate" />
                     </Typography>
                   </Box>
                 </Box>

@@ -1,3 +1,4 @@
+const { mongoose } = require("mongoose");
 const Product = require("../models/Product");
 
 const { validateQualify } = require("../validators/productValidator");
@@ -53,6 +54,16 @@ const createProduct = async (req, res) => {
 // 👉 Obtener todos los productos
 const getAllProducts = async (req, res) => {
   try {
+    const { userId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        data: { message: "ID de usuario inválido" },
+      });
+    }
+
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
     const products = await Product.aggregate([
       {
         $lookup: {
@@ -67,6 +78,19 @@ const getAllProducts = async (req, res) => {
         $addFields: {
           favoritesCount: {
             $ifNull: [{ $arrayElemAt: ["$favorite.favoritesCount", 0] }, 0],
+          },
+
+          isFavorite: {
+            $cond: {
+              if: {
+                $in: [
+                  userObjectId,
+                  { $ifNull: [{ $arrayElemAt: ["$favorite.users", 0] }, []] },
+                ],
+              },
+              then: true,
+              else: false,
+            },
           },
         },
       },
@@ -121,7 +145,9 @@ const qualifyProduct = async (req, res) => {
       });
     }
 
-    const product = await Product.findById(productId).select("qualifySum qualifyCount");
+    const product = await Product.findById(productId).select(
+      "qualifySum qualifyCount"
+    );
 
     if (!product) {
       return res.status(400).json({
